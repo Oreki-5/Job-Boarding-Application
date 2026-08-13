@@ -3,8 +3,8 @@ package com.Oreki5.JobBoardingApplication.Repos;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.Oreki5.JobBoardingApplication.Entities.Users;
+import com.Oreki5.JobBoardingApplication.Entities.Jobs;
 
-public interface UsersRepo extends MongoRepository<Users, ObjectId>{
+public interface JobsRepo extends MongoRepository<Jobs, ObjectId>{
 
 }
