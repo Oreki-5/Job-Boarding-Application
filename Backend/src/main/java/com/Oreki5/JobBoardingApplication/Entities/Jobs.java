@@ -2,27 +2,27 @@ package com.Oreki5.JobBoardingApplication.Entities;
 
 import java.util.List;
 
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.Oreki5.JobBoardingApplication.Models.Jobs.JobsRequestModel;
+
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@Document(collection="jobs")
+@Document(collection = "jobs")
 @Data
 @NoArgsConstructor
-public class Jobs {
-    @Id
-    private ObjectId id;
+@EqualsAndHashCode(callSuper = false)
+public class Jobs extends BaseEntity{
 
-    @Indexed
+    @TextIndexed
     private String jobTitle;
 
     private String jobDescription;
 
-    @Indexed
+    @TextIndexed
     private List<String> reqSkills;
 
     private List<String> optionalSkills;
@@ -30,5 +30,19 @@ public class Jobs {
     private String workMode;
 
     private int salary;
+
+    
+    
+    public void mapToJob(JobsRequestModel jobRequest){
+        this.jobTitle =  jobRequest.getJobTitle();
+        this.jobDescription = jobRequest.getJobDescription();
+        this.reqSkills = jobRequest.getReqSkills();
+        this.optionalSkills = jobRequest.getOptionalSkills();
+        this.workMode = jobRequest.getWorkMode();
+        this.salary = jobRequest.getSalary();
+        this.setUpdatedAt(jobRequest.getUpdatedAt());
+        System.out.println("Hi");
+    }
+
 
 }

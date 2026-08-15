@@ -1,14 +1,13 @@
 package com.Oreki5.JobBoardingApplication.Entities;
 
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
-
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
-public class Users {
-    @Id
-    private ObjectId id;
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+public class Users extends BaseEntity {
 
     private String username;
 
