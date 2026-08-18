@@ -1,7 +1,6 @@
 package com.Oreki5.JobBoardingApplication.Entities;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -13,7 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@Document(collection = "users")
+@Document(collection = "employers")
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
@@ -35,7 +34,9 @@ public class Employers extends Users {
     }
 
     public void mapToEmployers(EmployersRequestModel employersRequestModel) {
-        this.companyName = employersRequestModel.getCompanyDesc();
+        this.setId(employersRequestModel.getId());
+        this.setUsername(employersRequestModel.getUsername());
+        this.companyName = employersRequestModel.getCompanyName();
         this.companyDesc = employersRequestModel.getCompanyDesc();
         this.rating = employersRequestModel.getRating();
         this.employeeCount = employersRequestModel.getEmployeeCount();

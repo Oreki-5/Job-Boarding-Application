@@ -4,6 +4,8 @@ import lombok.Data;
 
 @Data
 public class EmployersRequestModel {
+    private String Id;
+    private String username;
     private String companyName;
     private String companyDesc;
     private String rating;

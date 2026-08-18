@@ -10,11 +10,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.Oreki5.JobBoardingApplication.Entities.Employers;
 import com.Oreki5.JobBoardingApplication.Entities.Jobs;
-import com.Oreki5.JobBoardingApplication.Models.Jobs.JobsRequestModel;
 import com.Oreki5.JobBoardingApplication.Models.ResponseModel;
+import com.Oreki5.JobBoardingApplication.Models.Jobs.JobsRequestModel;
+import com.Oreki5.JobBoardingApplication.Models.Jobs.JobsResponseModel;
 import com.Oreki5.JobBoardingApplication.Repos.EmployersRepo;
 import com.Oreki5.JobBoardingApplication.Repos.JobsRepo;
 
@@ -30,28 +32,34 @@ public class JobsService {
 
     }
 
-    public ResponseModel<Jobs> saveJobListing(JobsRequestModel jobRequest, String username) {
+    @Transactional
+    public ResponseModel<JobsResponseModel> saveJobListing(JobsRequestModel jobRequest, String employerId) throws Exception{
         if (jobRequest.getId() != null) {
 
             Jobs existingJob = jobsRepo.findById(jobRequest.getId()).get();
             existingJob.mapToJob(jobRequest);
-            return new ResponseModel<>(jobsRepo.save(existingJob));
+            return new ResponseModel<>(new JobsResponseModel(jobsRepo.save(existingJob)));
 
         } else {
+            jobRequest.setEmployer(employersRepo.findById(employerId).orElseThrow());
             Jobs job = new Jobs();
             job.mapToJob(jobRequest);
             job.setCreatedAt(LocalDateTime.now());
             String id = jobsRepo.save(job).getId();
-            Employers employer = employersRepo.findByUsername(username);
+            Employers employer = employersRepo.findById(employerId).orElseThrow();
             employer.getJobListings().add(job);
             employersRepo.save(employer);
-            return new ResponseModel<>(jobsRepo.findById(id).get());
+            // throw new Exception("custom exception");
+
+            return new ResponseModel<>(new JobsResponseModel(job));
         }
 
     }
 
-    public ResponseModel<List<Jobs>> getJobListingsByUsername(String username) {
-        return new ResponseModel<>(employersRepo.findByUsername(username).getJobListings());
+
+    // Need to created  a  separate response model since it has infinite nested Refs of each other 
+    public ResponseModel<List<Jobs>> getJobListingsByUsername(String employerId) {
+        return new ResponseModel<>(employersRepo.findById(employerId).orElseThrow().getJobListings());
     }
 
     public ResponseModel<PagedModel<Jobs>> getCustomResults(String text, int page, int size) {

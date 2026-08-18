@@ -3,6 +3,7 @@ package com.Oreki5.JobBoardingApplication.Entities;
 import java.util.List;
 
 import org.springframework.data.mongodb.core.index.TextIndexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.Oreki5.JobBoardingApplication.Models.Jobs.JobsRequestModel;
@@ -22,6 +23,9 @@ public class Jobs extends BaseEntity{
 
     private String jobDescription;
 
+    @DBRef
+    private Employers employer;
+
     @TextIndexed
     private List<String> reqSkills;
 
@@ -36,6 +40,7 @@ public class Jobs extends BaseEntity{
     public void mapToJob(JobsRequestModel jobRequest){
         this.jobTitle =  jobRequest.getJobTitle();
         this.jobDescription = jobRequest.getJobDescription();
+        this.employer = jobRequest.getEmployer();
         this.reqSkills = jobRequest.getReqSkills();
         this.optionalSkills = jobRequest.getOptionalSkills();
         this.workMode = jobRequest.getWorkMode();
