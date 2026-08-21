@@ -4,6 +4,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PagedModel;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import static org.springframework.http.HttpStatus.CREATED;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.Oreki5.JobBoardingApplication.Entities.Candidates;
 import com.Oreki5.JobBoardingApplication.Entities.JobApplications;
 import com.Oreki5.JobBoardingApplication.Entities.Jobs;
+import com.Oreki5.JobBoardingApplication.Models.Jobs.JobApplicationsEmployerResponseModel;
 import com.Oreki5.JobBoardingApplication.Models.Jobs.JobApplicationsRequestModel;
 import com.Oreki5.JobBoardingApplication.Models.Jobs.JobApplicationsResponseModel;
 import com.Oreki5.JobBoardingApplication.Models.Jobs.JobsRequestModel;
@@ -40,15 +45,16 @@ public class JobsController {
      */
 
     @PostMapping("/{employerId}")
-    public ResponseModel<JobsResponseModel> createJobListing(@RequestBody JobsRequestModel jobRequest, @PathVariable String employerId)
+    public ResponseModel<JobsResponseModel> createJobListing(@RequestBody JobsRequestModel jobRequest,
+            @PathVariable String employerId)
             throws Exception {
         return jobsService.saveJobListing(jobRequest, employerId);
 
     }
 
-    @GetMapping("/{username}")
-    public ResponseModel<List<Jobs>> getJobs(@PathVariable String username) {
-        return jobsService.getJobListingsByUsername(username);
+    @GetMapping("/{employerId}")
+    public ResponseModel<List<Jobs>> getJobs(@PathVariable String employerId) {
+        return jobsService.getJobListingsByUsername(employerId);
 
     }
 
@@ -60,7 +66,8 @@ public class JobsController {
     }
 
     @PutMapping("/{username}")
-    public ResponseModel<JobsResponseModel> updateJobListing(@RequestBody JobsRequestModel jobRequest, @PathVariable String username)
+    public ResponseModel<JobsResponseModel> updateJobListing(@RequestBody JobsRequestModel jobRequest,
+            @PathVariable String username)
             throws Exception {
         return jobsService.saveJobListing(jobRequest, username);
     }
@@ -77,9 +84,17 @@ public class JobsController {
      */
 
     @PostMapping("/apply")
-    public JobApplicationsResponseModel applyForJob(@RequestBody JobApplicationsRequestModel jobApplicationsRequest ) throws Exception {
+    public ResponseEntity<?> applyForJob(@RequestBody JobApplicationsRequestModel jobApplicationsRequest) {
         // TODO: process POST request
-        return applicationsService.saveApplication(jobApplicationsRequest);
+
+        try {
+            return new ResponseEntity<>(applicationsService.saveApplication(jobApplicationsRequest),
+                    HttpStatus.CREATED);
+        } catch (IllegalStateException e) {
+            return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+        } catch (NullPointerException e) {
+            return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+        }
 
     }
 
@@ -90,17 +105,18 @@ public class JobsController {
     }
 
     // Needs Paginated response
-    @GetMapping("/application/{jobId}")
-    public List<JobApplications> getAllApplicationsForTheJob(@PathVariable String jobId) {
+    @GetMapping("/applications/{jobId}")
+    public PagedModel<JobApplicationsEmployerResponseModel> getAllApplicationsForTheJob(@PathVariable String jobId,
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
 
-        return applicationsService.getAllApplicationsByJobId(jobId);
+        return applicationsService.getAllApplicationsByJobId(jobId, page, size);
     }
 
     @PutMapping("/applications/{id}")
     public JobApplications updateJobApplication(@PathVariable String id, @RequestBody JobApplications application) {
         // TODO: process PUT request
 
-        return applicationsService.updateApplication(id ,application);
+        return applicationsService.updateApplication(id, application);
 
     }
 
