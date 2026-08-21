@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 
+import com.Oreki5.JobBoardingApplication.Entities.Employers;
 import com.Oreki5.JobBoardingApplication.Entities.Jobs;
 
 public interface JobsRepo extends MongoRepository<Jobs, String> {
@@ -17,5 +19,8 @@ public interface JobsRepo extends MongoRepository<Jobs, String> {
             "{'$limit': ?2}"
         })
     List<Jobs> getCustomResult(String text, int skip, int limit);
+
+    @Query(fields="{employer : 0}")
+    List<Jobs> findByEmployer(Employers employer);
 
 }

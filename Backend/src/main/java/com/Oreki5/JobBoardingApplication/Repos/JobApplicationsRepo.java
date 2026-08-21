@@ -12,12 +12,15 @@ import com.Oreki5.JobBoardingApplication.Entities.Jobs;
 
 public interface JobApplicationsRepo extends MongoRepository<JobApplications, String> {
 
-    @Query(value="{ 'job' : ?2 }")
+    @Query(value="{ 'job' : ?2 }" , fields="{'job.jobTitle':1, 'candidate.firstName':1 }")
     @Aggregation(pipeline = { "{'$skip': ?0}", "{'$limit': ?1}" })
     public List<JobApplications> findCustom(int skip, int limit, Jobs job);
 
     public List<JobApplications> findAllByJobAndCandidate(Jobs job, Candidates candidate);
 
     public long countByJob(Jobs jobId);
+
+    @Query(fields="{candidate : 0}")
+    public List<JobApplications> findByCandidate(Candidates candidate);
 
 }

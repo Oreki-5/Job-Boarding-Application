@@ -45,7 +45,6 @@ public class Jobs extends BaseEntity{
         this.optionalSkills = jobRequest.getOptionalSkills();
         this.workMode = jobRequest.getWorkMode();
         this.salary = jobRequest.getSalary();
-        this.setUpdatedAt(jobRequest.getUpdatedAt());
         System.out.println("Hi");
     }
 

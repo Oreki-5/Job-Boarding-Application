@@ -21,11 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.Oreki5.JobBoardingApplication.Entities.Candidates;
 import com.Oreki5.JobBoardingApplication.Entities.JobApplications;
 import com.Oreki5.JobBoardingApplication.Entities.Jobs;
-import com.Oreki5.JobBoardingApplication.Models.Jobs.JobApplicationsEmployerResponseModel;
-import com.Oreki5.JobBoardingApplication.Models.Jobs.JobApplicationsRequestModel;
-import com.Oreki5.JobBoardingApplication.Models.Jobs.JobApplicationsResponseModel;
 import com.Oreki5.JobBoardingApplication.Models.Jobs.JobsRequestModel;
 import com.Oreki5.JobBoardingApplication.Models.Jobs.JobsResponseModel;
+import com.Oreki5.JobBoardingApplication.Models.Jobs.JobApplications.JobApplicationsEmployerRequestModel;
+import com.Oreki5.JobBoardingApplication.Models.Jobs.JobApplications.JobApplicationsEmployerResponseModel;
+import com.Oreki5.JobBoardingApplication.Models.Jobs.JobApplications.JobApplicationsRequestModel;
+import com.Oreki5.JobBoardingApplication.Models.Jobs.JobApplications.JobApplicationsResponseModel;
 import com.Oreki5.JobBoardingApplication.Models.ResponseModel;
 import com.Oreki5.JobBoardingApplication.Services.JobApplicationService;
 import com.Oreki5.JobBoardingApplication.Services.JobsService;
@@ -54,7 +55,7 @@ public class JobsController {
 
     @GetMapping("/{employerId}")
     public ResponseModel<List<Jobs>> getJobs(@PathVariable String employerId) {
-        return jobsService.getJobListingsByUsername(employerId);
+        return jobsService.getJobListingsByEmployerId(employerId);
 
     }
 
@@ -65,11 +66,11 @@ public class JobsController {
 
     }
 
-    @PutMapping("/{username}")
+    @PutMapping("/{id}")
     public ResponseModel<JobsResponseModel> updateJobListing(@RequestBody JobsRequestModel jobRequest,
-            @PathVariable String username)
+            @PathVariable String id)
             throws Exception {
-        return jobsService.saveJobListing(jobRequest, username);
+        return jobsService.updateJobListing(jobRequest, id);
     }
 
     @DeleteMapping("/{id}")
@@ -113,8 +114,7 @@ public class JobsController {
     }
 
     @PutMapping("/applications/{id}")
-    public JobApplications updateJobApplication(@PathVariable String id, @RequestBody JobApplications application) {
-        // TODO: process PUT request
+    public JobApplicationsEmployerResponseModel updateJobApplication(@PathVariable String id, @RequestBody JobApplicationsEmployerRequestModel application) {
 
         return applicationsService.updateApplication(id, application);
 

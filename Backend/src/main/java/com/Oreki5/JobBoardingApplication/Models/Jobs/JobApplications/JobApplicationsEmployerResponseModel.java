@@ -1,4 +1,4 @@
-package com.Oreki5.JobBoardingApplication.Models.Jobs;
+package com.Oreki5.JobBoardingApplication.Models.Jobs.JobApplications;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +16,7 @@ public class JobApplicationsEmployerResponseModel {
     private String email;
     private int expectedSalary;
     private String coverLetter;
+    private String status;
 
     public JobApplicationsEmployerResponseModel(JobApplications application) {
         this.candidateName = application.getCandidate().getFirstName() + " " + application.getCandidate().getLastName();
@@ -24,6 +25,7 @@ public class JobApplicationsEmployerResponseModel {
         this.email = application.getCandidate().getEmail();
         this.expectedSalary = application.getCandidate().getExpectedSalary();
         this.coverLetter = application.getCoverLetter();
+        this.status = application.getStatus();
     }
 
     public static List<JobApplicationsEmployerResponseModel> toEmployersResponse(List<JobApplications> applications){

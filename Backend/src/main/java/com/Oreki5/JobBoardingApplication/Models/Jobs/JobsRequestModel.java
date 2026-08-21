@@ -10,7 +10,6 @@ import lombok.Data;
 @Data
 public class JobsRequestModel {
 
-    private String id;
 
     private String jobTitle;
 
@@ -25,6 +24,5 @@ public class JobsRequestModel {
     private String workMode;
 
     private int salary;
-    
-    private LocalDateTime updatedAt = LocalDateTime.now();
+
 }

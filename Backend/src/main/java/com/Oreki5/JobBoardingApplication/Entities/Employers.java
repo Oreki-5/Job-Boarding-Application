@@ -24,8 +24,6 @@ public class Employers extends Users {
     public int employeeCount;
     public String foundedYear;
 
-    @DBRef
-    private List<Jobs> jobListings = new ArrayList<>();
 
     public class companyName {
     }

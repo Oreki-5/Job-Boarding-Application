@@ -33,20 +33,8 @@ public class Candidates extends Users{
     private String email;
     private int expectedSalary; //in LPA
     private String professionalSummary;
-    @DBRef
-    private List<JobApplications> applications; //DBRef of JobApplication
     private String profilePicture; // stores path
 
-
-
-
-    public Candidates addApplication(JobApplications application){
-        if(this.applications == null){
-            this.applications = new ArrayList<>();
-        }
-        this.applications.add(application);
-        return this;
-    }
 
     
 

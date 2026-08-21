@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.Oreki5.JobBoardingApplication.Entities.Candidates;
-import com.Oreki5.JobBoardingApplication.Entities.JobApplications;
+import com.Oreki5.JobBoardingApplication.Models.Jobs.JobApplications.JobApplicationsResponseModel;
 import com.Oreki5.JobBoardingApplication.Services.CandidatesService;
 
 
@@ -48,7 +48,7 @@ public class CandidatesController {
     }
 
     @GetMapping("/applications/{id}")
-    public List<JobApplications> getAllApplicationsOfCandidate(@PathVariable String id) {
+    public List<JobApplicationsResponseModel> getAllApplicationsOfCandidate(@PathVariable String id) {
         return candidatesService.getAllApplicationsOfCandidate(id); 
         
     }

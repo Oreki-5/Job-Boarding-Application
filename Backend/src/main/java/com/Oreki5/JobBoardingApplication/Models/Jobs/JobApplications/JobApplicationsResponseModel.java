@@ -1,14 +1,10 @@
-package com.Oreki5.JobBoardingApplication.Models.Jobs;
+package com.Oreki5.JobBoardingApplication.Models.Jobs.JobApplications;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.Oreki5.JobBoardingApplication.Entities.Candidates;
 import com.Oreki5.JobBoardingApplication.Entities.JobApplications;
-import com.Oreki5.JobBoardingApplication.Entities.Jobs;
-import com.Oreki5.JobBoardingApplication.Repos.JobsRepo;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
@@ -19,8 +15,6 @@ public class JobApplicationsResponseModel {
 
     private String companyName;
 
-    private String candidateName;
-
     private String status;
     
     private String coverLetter;
@@ -28,7 +22,7 @@ public class JobApplicationsResponseModel {
 
     public JobApplicationsResponseModel(JobApplications application) {
         this.id = application.getId();
-        this.candidateName = application.getCandidate().getFirstName() +" " + application.getCandidate().getLastName();
+        // this.candidateName = application.getCandidate().getFirstName() +" " + application.getCandidate().getLastName();
         this.jobTitle = application.getJob().getJobTitle();
         this.companyName = application.getJob().getEmployer().getCompanyName();
         this.status = application.getStatus();
@@ -36,7 +30,13 @@ public class JobApplicationsResponseModel {
     }
 
 
-    
+    public static List<JobApplicationsResponseModel> convertFromJobApplications(List<JobApplications> applications){
+        List<JobApplicationsResponseModel> converted = new ArrayList<>();
+        for(JobApplications application : applications){
+            converted.add(new JobApplicationsResponseModel(application));
+        }
+        return converted;
+    }
     
 
 

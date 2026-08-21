@@ -11,11 +11,11 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.Oreki5.JobBoardingApplication.Entities.Candidates;
 import com.Oreki5.JobBoardingApplication.Entities.JobApplications;
-import com.Oreki5.JobBoardingApplication.Models.Jobs.JobApplicationsEmployerResponseModel;
-import com.Oreki5.JobBoardingApplication.Models.Jobs.JobApplicationsRequestModel;
-import com.Oreki5.JobBoardingApplication.Models.Jobs.JobApplicationsResponseModel;
+import com.Oreki5.JobBoardingApplication.Models.Jobs.JobApplications.JobApplicationsEmployerRequestModel;
+import com.Oreki5.JobBoardingApplication.Models.Jobs.JobApplications.JobApplicationsEmployerResponseModel;
+import com.Oreki5.JobBoardingApplication.Models.Jobs.JobApplications.JobApplicationsRequestModel;
+import com.Oreki5.JobBoardingApplication.Models.Jobs.JobApplications.JobApplicationsResponseModel;
 import com.Oreki5.JobBoardingApplication.Repos.CandidatesRepo;
 import com.Oreki5.JobBoardingApplication.Repos.JobApplicationsRepo;
 import com.Oreki5.JobBoardingApplication.Repos.JobsRepo;
@@ -48,11 +48,9 @@ public class JobApplicationService {
         if (!j.isEmpty()) {
             throw new IllegalStateException("You Already Applied for this job");
         }
-        String newApplicationId = applicationsRepo.save(application).getId();
-        JobApplications savedApplication = applicationsRepo.findById(newApplicationId).orElseThrow();
-        Candidates candidate = candidatesRepo.findById(savedApplication.getCandidate().getId()).orElseThrow();
-        candidatesRepo.save(candidate.addApplication(application));
-        return new JobApplicationsResponseModel(savedApplication);
+        
+
+        return new JobApplicationsResponseModel(applicationsRepo.save(application));
     }
 
     public void deleteJobApplication(String id) {
@@ -66,9 +64,10 @@ public class JobApplicationService {
         return new PagedModel<>(pagedList);
     }
 
-    public JobApplications updateApplication(String id, JobApplications application) {
-        application.setId(id);
-        return applicationsRepo.save(application);
+    public JobApplicationsEmployerResponseModel updateApplication(String id, JobApplicationsEmployerRequestModel update) {
+        JobApplications application = applicationsRepo.findById(id).orElseThrow();
+        application.setStatus(update.getStatus());
+        return new JobApplicationsEmployerResponseModel(applicationsRepo.save(application));
 
     }
 

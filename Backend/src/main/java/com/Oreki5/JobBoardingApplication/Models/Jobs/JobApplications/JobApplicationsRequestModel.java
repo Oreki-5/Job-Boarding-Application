@@ -1,4 +1,4 @@
-package com.Oreki5.JobBoardingApplication.Models.Jobs;
+package com.Oreki5.JobBoardingApplication.Models.Jobs.JobApplications;
 
 import lombok.Data;
 

@@ -7,13 +7,17 @@ import org.springframework.stereotype.Service;
 
 import com.Oreki5.JobBoardingApplication.Entities.Candidates;
 import com.Oreki5.JobBoardingApplication.Entities.JobApplications;
+import com.Oreki5.JobBoardingApplication.Models.Jobs.JobApplications.JobApplicationsResponseModel;
 import com.Oreki5.JobBoardingApplication.Repos.CandidatesRepo;
+import com.Oreki5.JobBoardingApplication.Repos.JobApplicationsRepo;
 
 @Service
 public class CandidatesService {
 
     @Autowired
     private CandidatesRepo candidatesRepo;
+    @Autowired
+    private JobApplicationsRepo applicationsRepo;
 
     public Candidates createCandidate(Candidates candidate) {
         return candidatesRepo.save(candidate);
@@ -28,8 +32,9 @@ public class CandidatesService {
         return candidatesRepo.findById(id).orElseThrow();
     }
 
-    public List<JobApplications> getAllApplicationsOfCandidate(String id) {
-        return candidatesRepo.findById(id).orElseThrow().getApplications();
+    public List<JobApplicationsResponseModel> getAllApplicationsOfCandidate(String id) {
+
+        return JobApplicationsResponseModel.convertFromJobApplications(applicationsRepo.findByCandidate(candidatesRepo.findById(id).orElseThrow()));
     }
 
     public void deleteCandidateProfileById(String id) {
